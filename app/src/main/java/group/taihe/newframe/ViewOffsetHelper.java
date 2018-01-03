@@ -4,7 +4,6 @@ import android.support.v4.view.ViewCompat;
 import android.view.View;
 
 /**
- * TODO: 2017/9/27 此处需要输入描述文字
  *
  * @author Soli
  * @Time 2017/9/27

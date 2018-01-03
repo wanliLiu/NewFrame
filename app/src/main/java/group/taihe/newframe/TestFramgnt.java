@@ -93,7 +93,7 @@ public class TestFramgnt extends Fragment {
 //            layout.addView(new RecyclerView(getContext()), new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
 //            return layout;
 
-            return inflater.inflate(R.layout.test, null);
+            return inflater.inflate(R.layout.test, container,false);
         }
     }
 
@@ -149,12 +149,7 @@ public class TestFramgnt extends Fragment {
     }
 
     private void refek() {
-        layout.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                layout.autoRefresh();
-            }
-        }, 1000);
+        layout.postDelayed(() -> layout.autoRefresh(), 1000);
     }
 
     /**
