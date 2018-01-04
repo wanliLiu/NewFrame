@@ -10,15 +10,15 @@ import android.support.v7.widget.CardView;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.webkit.WebResourceRequest;
 import android.webkit.WebView;
-import android.widget.LinearLayout;
+import android.webkit.WebViewClient;
 import android.widget.TextView;
 
-import com.soli.pullupdownrefresh.PullRefreshLayout;
+import com.soli.pullupdownrefresh.ListLoadMoreAction;
 import com.soli.pullupdownrefresh.more.LoadMoreRecyclerAdapter;
 
 import java.util.ArrayList;
@@ -26,8 +26,6 @@ import java.util.List;
 import java.util.Random;
 
 /**
- * TODO: 2017/9/25 此处需要输入描述文字
- *
  * @author Soli
  * @Time 2017/9/25
  */
@@ -35,12 +33,11 @@ public class TestFramgnt extends Fragment {
 
     private int pos;
     private List<Integer> mData = new ArrayList<>();
-    protected int page = 0;
-    protected int pageSize = 40;
+    protected int pageSize = 60;
     private TestAdapter adapter;
     private LoadMoreRecyclerAdapter mAdapter;
     private RecyclerView recyclerView;
-    private PullRefreshLayout layout;
+    private ListLoadMoreAction loadMoreAction;
 
     /**
      * @param position
@@ -67,33 +64,9 @@ public class TestFramgnt extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         if (pos == 2) {
-            NestedScrollView view = new NestedScrollView(getContext());
-
-            LinearLayout layou = new LinearLayout(getContext());
-            layou.setOrientation(LinearLayout.VERTICAL);
-
-            TextView tex = new TextView(getContext());
-            tex.setText("我是测试的");
-            tex.setPadding(60, 60, 60, 60);
-            tex.setFocusable(true);
-            tex.setFocusableInTouchMode(true);
-            tex.setGravity(Gravity.CENTER);
-            tex.setBackgroundColor(getContext().getResources().getColor(R.color.green_500));
-            layou.addView(tex, new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT));
-
-            WebView bridgeWebView = new WebView(getContext());
-            bridgeWebView.setFocusable(false);
-            bridgeWebView.setFocusableInTouchMode(false);
-            bridgeWebView.setId(29302);
-            layou.addView(bridgeWebView);
-            view.addView(layou);
-            return view;
+            return inflater.inflate(R.layout.test_web, container, false);
         } else {
-//            layout = new PullRefreshLayout(getContext());
-//            layout.addView(new RecyclerView(getContext()), new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
-//            return layout;
-
-            return inflater.inflate(R.layout.test, container,false);
+            return inflater.inflate(R.layout.test, container, false);
         }
     }
 
@@ -102,55 +75,48 @@ public class TestFramgnt extends Fragment {
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         if (pos == 2 && view instanceof NestedScrollView) {
-            WebView webView = (WebView) view.findViewById(29302);
+            WebView webView = view.findViewById(R.id.testWebView);
+            webView.setWebViewClient(new WebViewClient() {
+                @Override
+                public boolean shouldOverrideUrlLoading(WebView view, WebResourceRequest request) {
+                    return true;
+                }
+
+                @Override
+                public boolean shouldOverrideUrlLoading(WebView view, String url) {
+                    view.loadUrl(url);
+                    return super.shouldOverrideUrlLoading(view, url);
+                }
+            });
             webView.loadUrl("http://www.baidu.com");
-        } else if (view instanceof PullRefreshLayout) {
-
-            layout = view.findViewById(R.id.refreshLayout);
+        } else {
             recyclerView = view.findViewById(R.id.recyclerView);
-
-//            RecyclerView recyclerView = (RecyclerView) ((PullRefreshLayout) view).getChildAt(1);
             RecyclerView.LayoutManager manager = pos == 0 ? new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false) : new GridLayoutManager(getContext(), 3, GridLayoutManager.VERTICAL, false);
             recyclerView.setLayoutManager(manager);
 
             adapter = new TestAdapter(getContext());
             mAdapter = new LoadMoreRecyclerAdapter(adapter);
 
-            if (manager instanceof GridLayoutManager){
-                ( (GridLayoutManager)manager).setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup() {
+            if (manager instanceof GridLayoutManager) {
+                ((GridLayoutManager) manager).setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup() {
                     @Override
                     public int getSpanSize(int position) {
                         if (mAdapter.isHeader(position) || mAdapter.isFooter(position))
-                            return ( (GridLayoutManager)manager).getSpanCount();
+                            return ((GridLayoutManager) manager).getSpanCount();
                         return 1;
                     }
                 });
             }
 
             recyclerView.setAdapter(mAdapter);
-            layout.setPageSize(pageSize);
-            layout.setRefreshListener(new PullRefreshLayout.onRefrshListener() {
-                @Override
-                public void onPullDownRefresh() {
-                    page = 0;
-                    mData.clear();
-                    addData();
-                }
+            loadMoreAction = new ListLoadMoreAction();
+            loadMoreAction.setPageSize(pageSize);
+            loadMoreAction.attachToListFor(recyclerView, actionFromClick -> addData());
 
-                @Override
-                public void onPullupRefresh(boolean actionFromClick) {
-                    page++;
-                    addData();
-                }
-            });
-
-            refek();
+            setData();
         }
     }
 
-    private void refek() {
-        layout.postDelayed(() -> layout.autoRefresh(), 1000);
-    }
 
     /**
      *
@@ -159,19 +125,18 @@ public class TestFramgnt extends Fragment {
         for (int i = 0; i < pageSize; i++) {
             mData.add(i);
         }
+        mAdapter.notifyDataSetChangedHF();
     }
 
     protected void addData() {
-        layout.postDelayed(() -> {
+        recyclerView.postDelayed(() -> {
             setData();
-            mAdapter.notifyDataSetChanged();
-            layout.onRefreshComplete();
-        }, 100);
+            loadMoreAction.onloadMoreComplete();
+        }, 1000);
     }
 
     private class TestAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         private Context ctx;
-
 
         /**
          * @return
