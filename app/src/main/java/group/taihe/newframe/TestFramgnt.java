@@ -18,7 +18,7 @@ import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.TextView;
 
-import com.soli.pullupdownrefresh.ListLoadMoreAction;
+import com.soli.pullupdownrefresh.PullRefreshLayout;
 import com.soli.pullupdownrefresh.more.LoadMoreRecyclerAdapter;
 
 import java.util.ArrayList;
@@ -36,8 +36,8 @@ public class TestFramgnt extends Fragment {
     protected int pageSize = 60;
     private TestAdapter adapter;
     private LoadMoreRecyclerAdapter mAdapter;
+    private PullRefreshLayout layout;
     private RecyclerView recyclerView;
-    private ListLoadMoreAction loadMoreAction;
 
     /**
      * @param position
@@ -90,6 +90,7 @@ public class TestFramgnt extends Fragment {
             });
             webView.loadUrl("http://www.baidu.com");
         } else {
+            layout = view.findViewById(R.id.refreshLayout);
             recyclerView = view.findViewById(R.id.recyclerView);
             RecyclerView.LayoutManager manager = pos == 0 ? new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false) : new GridLayoutManager(getContext(), 3, GridLayoutManager.VERTICAL, false);
             recyclerView.setLayoutManager(manager);
@@ -109,9 +110,19 @@ public class TestFramgnt extends Fragment {
             }
 
             recyclerView.setAdapter(mAdapter);
-            loadMoreAction = new ListLoadMoreAction();
-            loadMoreAction.setPageSize(pageSize);
-            loadMoreAction.attachToListFor(recyclerView, actionFromClick -> addData());
+            layout.setEnabled(false);
+            layout.setRefreshListener(new PullRefreshLayout.onRefrshListener() {
+                @Override
+                public void onPullDownRefresh() {
+                    mData.clear();
+                    addData();
+                }
+
+                @Override
+                public void onPullupRefresh(boolean actionFromClick) {
+                    addData();
+                }
+            });
 
             setData();
         }
@@ -131,7 +142,7 @@ public class TestFramgnt extends Fragment {
     protected void addData() {
         recyclerView.postDelayed(() -> {
             setData();
-            loadMoreAction.onloadMoreComplete();
+            layout.onRefreshComplete();
         }, 1000);
     }
 
