@@ -43,5 +43,4 @@ dependencies {
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.1'
 
     implementation 'com.soli.refresh:pull_up_down:0.0.3'
-//    implementation 'com.airbnb.android:lottie:2.2.5'
 }
