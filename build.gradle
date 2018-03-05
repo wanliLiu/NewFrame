@@ -19,7 +19,7 @@ allprojects {
         google()
         jcenter()
 //        mavenLocal()
-        maven { url "D://AndroidStudio/sdk/extras/taihe/m2repository/" }
+//        maven { url "D://AndroidStudio/sdk/extras/taihe/m2repository/" }
     }
 }
 
@@ -34,5 +34,5 @@ project.ext {
     ANDROID_MIN_SDK_VERSION = 14
     ANDROID_TARGET_SDK_VERSION = 27
 
-    supportPackageVersion = "27.0.2"
+    supportPackageVersion = "27.1.0"
 }
