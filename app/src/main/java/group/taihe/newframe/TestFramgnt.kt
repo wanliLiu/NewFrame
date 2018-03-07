@@ -29,8 +29,27 @@ import java.util.Random
  */
 class TestFramgnt : Fragment() {
 
+    data class DataModlue(val index: Int, val color: String)
+
+    private val randColorCode: String
+        get() {
+            var r: String
+            var g: String
+            var b: String
+            val random = Random()
+            r = Integer.toHexString(random.nextInt(256)).toUpperCase()
+            g = Integer.toHexString(random.nextInt(256)).toUpperCase()
+            b = Integer.toHexString(random.nextInt(256)).toUpperCase()
+
+            r = if (r.length == 1) "0" + r else r
+            g = if (g.length == 1) "0" + g else g
+            b = if (b.length == 1) "0" + b else b
+
+            return "#" + r + g + b
+        }
+
     private var pos: Int = 0
-    private val mData = ArrayList<Int>()
+    private val mData = ArrayList<DataModlue>()
     protected var pageSize = 60
     private var adapter: TestAdapter? = null
     private var mAdapter: LoadMoreRecyclerAdapter? = null
@@ -59,13 +78,13 @@ class TestFramgnt : Fragment() {
         if (pos == 2 && view is NestedScrollView) {
             val webView = view.findViewById<WebView>(R.id.testWebView)
             webView.webViewClient = object : WebViewClient() {
-                override fun shouldOverrideUrlLoading(view: WebView, request: WebResourceRequest): Boolean {
-                    return true
-                }
+//                override fun shouldOverrideUrlLoading(view: WebView, request: WebResourceRequest): Boolean {
+//                    return true
+//                }
 
                 override fun shouldOverrideUrlLoading(view: WebView, url: String): Boolean {
                     view.loadUrl(url)
-                    return super.shouldOverrideUrlLoading(view, url)
+                    return true
                 }
             }
             webView.loadUrl("http://www.baidu.com")
@@ -87,6 +106,7 @@ class TestFramgnt : Fragment() {
             }
 
             recyclerView!!.adapter = mAdapter
+            //disable scrooll
             layout!!.isEnabled = false
             layout!!.setRefreshListener(object : PullRefreshLayout.onRefrshListener {
                 override fun onPullDownRefresh() {
@@ -109,7 +129,7 @@ class TestFramgnt : Fragment() {
      */
     protected fun setData() {
         for (i in 0 until pageSize) {
-            mData.add(i)
+            mData.add(DataModlue(i, randColorCode))
         }
         mAdapter!!.notifyDataSetChangedHF()
     }
@@ -123,26 +143,6 @@ class TestFramgnt : Fragment() {
 
     private inner class TestAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
-        /**
-         * @return
-         */
-        private val randColorCode: String
-            get() {
-                var r: String
-                var g: String
-                var b: String
-                val random = Random()
-                r = Integer.toHexString(random.nextInt(256)).toUpperCase()
-                g = Integer.toHexString(random.nextInt(256)).toUpperCase()
-                b = Integer.toHexString(random.nextInt(256)).toUpperCase()
-
-                r = if (r.length == 1) "0" + r else r
-                g = if (g.length == 1) "0" + g else g
-                b = if (b.length == 1) "0" + b else b
-
-                return "#" + r + g + b
-            }
-
         override fun getItemCount(): Int {
             return mData.size
         }
@@ -153,8 +153,9 @@ class TestFramgnt : Fragment() {
 
         override fun onBindViewHolder(mholder: RecyclerView.ViewHolder, position: Int) {
             val holder = mholder as TestViewHolder
-            holder.text.text = position.toString()
-            holder.carview.setCardBackgroundColor(Color.parseColor(randColorCode))
+            val module = mData[position]
+            holder.text.text = module.index.toString()
+            holder.carview.setCardBackgroundColor(Color.parseColor(module.color))
         }
 
     }

@@ -10,7 +10,6 @@ import android.support.v7.app.AppCompatActivity
 import android.util.TypedValue
 import android.view.WindowManager
 import android.widget.TextView
-import butterknife.ButterKnife
 import kotlinx.android.synthetic.main.activity_scrolling_new.*
 
 /**
@@ -27,15 +26,35 @@ class NewScrollingActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_scrolling_new)
-        ButterKnife.bind(this)
         //        initStatusMode();
         setSupportActionBar(toolbar)
 
         supportActionBar!!.setDisplayHomeAsUpEnabled(true)
-        toolbar.setNavigationOnClickListener { v -> onBackPressed() }
+        toolbar.setNavigationOnClickListener { onBackPressed() }
         //        setTitle("");
 
-        viewpage!!.adapter = object : FragmentPagerAdapter(supportFragmentManager) {
+        app_bar.addOnOffsetChangedListener { appBarLayout, verticalOffset ->
+            eventDetect.canDetect = verticalOffset >= 0
+//            eventDetect.canDetect = false
+        }
+
+//        topImage.postDelayed({
+//            topImage.layoutParams?.height?.let {
+//                val animation = ValueAnimator.ofInt(it, it + 1000).setDuration(2000)
+//                animation.interpolator = AccelerateDecelerateInterpolator()
+//                animation.addUpdateListener { animation ->
+//                    run {
+//                        topImage.layoutParams.height = animation.animatedValue as Int
+//                        topImage.requestLayout()
+//                    }
+//                }
+//                animation.repeatCount = ValueAnimator.INFINITE
+//                animation.repeatMode = ValueAnimator.REVERSE
+//                animation.start()
+//            }
+//        }, 1000)
+
+        viewpage.adapter = object : FragmentPagerAdapter(supportFragmentManager) {
             override fun getItem(position: Int): Fragment {
                 return TestFramgnt.newInstance(position)
             }
@@ -48,7 +67,7 @@ class NewScrollingActivity : AppCompatActivity() {
                 return title[position]
             }
         }
-        viewpage!!.offscreenPageLimit = 3
+        viewpage.offscreenPageLimit = 3
         //        toolbTitle.setText("小酒馆音乐空间");
         //        final View group = findViewById(R.id.toolbarContent);
         //        app_bar.addOnOffsetChangedListener((appBarLayout, verticalOffset) -> {
@@ -68,7 +87,7 @@ class NewScrollingActivity : AppCompatActivity() {
 
 
         initTag()
-        tablayout!!.setupWithViewPager(viewpage)
+        tablayout.setupWithViewPager(viewpage)
         //        viewpage.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
         //            @Override
         //            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
@@ -108,14 +127,14 @@ class NewScrollingActivity : AppCompatActivity() {
         //        });
 
         app_bar.setOnClickListener {
-            isExpand = !isExpand
-            app_bar.setExpanded(isExpand)
+//            isExpand = !isExpand
+//            app_bar.setExpanded(isExpand)
         }
     }
 
     private fun initTag() {
         for (i in title.indices) {
-            tablayout.addTab(getTag(i, if (i == 0) true else false))
+            tablayout.addTab(getTag(i, i == 0))
         }
     }
 
@@ -132,7 +151,7 @@ class NewScrollingActivity : AppCompatActivity() {
         }
     }
 
-    private fun getTag(post: Int, iselect: Boolean): TabLayout.Tab {
+    fun getTag(post: Int, iselect: Boolean): TabLayout.Tab {
         val tab = tablayout.newTab()
         val view = layoutInflater.inflate(R.layout.custom_title, null)
         val textView = view.findViewById<TextView>(R.id.text)

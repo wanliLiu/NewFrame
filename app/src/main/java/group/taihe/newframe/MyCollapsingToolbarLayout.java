@@ -319,6 +319,7 @@ public class MyCollapsingToolbarLayout extends FrameLayout {
             }
 
             int scrollRangle = layout.getTotalScrollRange();
+            Log.e("verticalOffset", String.valueOf(verticalOffset));
             double alpha = Math.abs(verticalOffset) * 1.0 / scrollRangle * 1.0;
             final View group = findViewById(R.id.toolbarContent);
             group.setBackgroundColor(getColorWithAlpha(alpha, getContext().getResources().getColor(R.color.actionbar_color)));
@@ -332,7 +333,7 @@ public class MyCollapsingToolbarLayout extends FrameLayout {
      * @return
      */
     private int getColorWithAlpha(double alpha, int baseColor) {
-        Log.e("alpha", String.valueOf(alpha));
+//        Log.e("alpha", String.valueOf(alpha));
         int a = Math.min(255, Math.max(0, (int) (alpha * 255))) << 24;
         int rgb = 0x00ffffff & baseColor;
         return a + rgb;

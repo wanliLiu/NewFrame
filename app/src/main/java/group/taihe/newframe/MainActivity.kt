@@ -12,7 +12,7 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        btnSystem.setOnClickListener { startActivity(Intent(this, ScrollingActivity::class.java)) }
-        btnNew.setOnClickListener { startActivity(Intent(this, NewScrollingActivity::class.java)) }
+        btnSystem.setOnClickListener { start(ScrollingActivity::class.java) }
+        btnNew.setOnClickListener { start(NewScrollingActivity::class.java) }
     }
 }
