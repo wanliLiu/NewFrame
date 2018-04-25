@@ -44,5 +44,5 @@ dependencies {
 
     implementation 'com.soli.refresh:pull_up_down:latest.release'
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jre7:$kotlin_version"
-    implementation "com.facebook.fresco:stetho:1.+"
+    implementation "com.facebook.fresco:stetho:latest.release"
 }

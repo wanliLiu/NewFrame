@@ -28,8 +28,7 @@ class EventDownDetectView @JvmOverloads constructor(ctx: Context, attrs: Attribu
     var dragDistance: Float = 0.0f
 
     val topImage: ImageView by lazy { this.findViewById<ImageView>(R.id.topImage) }
-    val topImageMinHeight by lazy { context.dipToPixels(150) }
-    val topImageMaxHeight by lazy { context.dipToPixels(500) }
+    val topImageMinHeight by lazy { topImage.layoutParams.height }
     /**
      *
      */
@@ -86,7 +85,7 @@ class EventDownDetectView @JvmOverloads constructor(ctx: Context, attrs: Attribu
     }
 
     private fun changeTopImageHeight(diff: Int) {
-        topImage.layoutParams.height = MathUtils.clamp(topImage.layoutParams.height + diff, topImageMinHeight, topImageMaxHeight)
+        topImage.layoutParams.height = MathUtils.clamp(topImage.layoutParams.height + diff, topImageMinHeight, topImageMinHeight * 2)
         topImage.requestLayout()
     }
 
@@ -94,7 +93,7 @@ class EventDownDetectView @JvmOverloads constructor(ctx: Context, attrs: Attribu
      *
      */
     private fun releaseToInitPosition() {
-        val height = topImage.layoutParams.height;
+        val height = topImage.layoutParams.height
         if (height > topImageMinHeight) {
             val animation = ValueAnimator.ofInt(height, topImageMinHeight)
 //            animation.interpolator = AccelerateInterpolator()
