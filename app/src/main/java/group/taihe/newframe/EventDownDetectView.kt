@@ -13,7 +13,7 @@ import android.widget.ImageView
 /**
  * Created by soli on 18-3-7.
  */
-class EventDownDetectView @JvmOverloads constructor(ctx: Context, attrs: AttributeSet) : CoordinatorLayout(ctx, attrs) {
+class EventDownDetectView constructor(ctx: Context, attrs: AttributeSet) : CoordinatorLayout(ctx, attrs) {
 
     //appbarLayout 的offset为0的时候可以操作
     var canDetect: Boolean = false

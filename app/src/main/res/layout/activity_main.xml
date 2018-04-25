@@ -1,25 +1,112 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:gravity="center"
-    android:orientation="vertical"
     tools:context="group.taihe.newframe.MainActivity">
 
     <Button
         android:id="@+id/btnSystem"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:onClick="onl"
+        android:layout_marginEnd="16dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
         android:text="MaterialDesign 提供的默认功能"
-        android:textAllCaps="false" />
+        android:textAllCaps="false"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.2"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <Button
         android:id="@+id/btnNew"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:onClick="onsl"
-        android:text="在官方提供的基础修改" />
+        android:layout_marginEnd="16dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="32dp"
+        android:text="在官方提供的基础修改"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.8"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/btnSystem" />
 
-</LinearLayout>
+    <Button
+        android:id="@+id/login"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="Google Login"
+        app:layout_constraintRight_toLeftOf="@id/btnNew"
+        app:layout_constraintTop_toBottomOf="@id/btnSystem" />
+
+    <Button
+        android:id="@+id/testOne"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="测试1"
+        app:layout_constraintCircle="@id/btnNew"
+        app:layout_constraintCircleAngle="230"
+        app:layout_constraintCircleRadius="75dp" />
+
+    <Button
+        android:id="@+id/testA"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="16dp"
+        android:text="A"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/testOne" />
+
+    <ImageView
+        android:id="@+id/testB"
+        android:layout_width="80dp"
+        android:layout_height="0dp"
+        android:layout_marginLeft="8dp"
+        android:src="@mipmap/ic_launcher_round"
+        app:layout_constraintDimensionRatio="1:1"
+        app:layout_constraintLeft_toRightOf="@id/testA"
+        app:layout_constraintTop_toBottomOf="@id/testOne"
+        app:layout_goneMarginLeft="160dp" />
+
+    <Button
+        android:id="@+id/chainA"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="chainA"
+        app:layout_constraintHorizontal_bias="0.8"
+        app:layout_constraintHorizontal_chainStyle="spread"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toLeftOf="@+id/chainB"
+        app:layout_constraintTop_toBottomOf="@id/testB" />
+
+    <Button
+        android:id="@+id/chainB"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="chainB"
+        app:layout_constraintHorizontal_weight="1"
+        app:layout_constraintLeft_toRightOf="@id/chainA"
+        app:layout_constraintRight_toLeftOf="@+id/chainC"
+        app:layout_constraintTop_toBottomOf="@id/testB"
+        app:layout_goneMarginLeft="25dp" />
+
+    <Button
+        android:id="@+id/chainC"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="chainC"
+        android:layout_marginLeft="16dp"
+        app:layout_constraintHorizontal_weight="2"
+        app:layout_constraintLeft_toRightOf="@id/chainB"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/testB" />
+
+</android.support.constraint.ConstraintLayout>

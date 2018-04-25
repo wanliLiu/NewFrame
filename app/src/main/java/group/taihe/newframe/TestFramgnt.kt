@@ -12,16 +12,12 @@ import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.webkit.WebResourceRequest
 import android.webkit.WebView
 import android.webkit.WebViewClient
 import android.widget.TextView
-
 import com.soli.pullupdownrefresh.PullRefreshLayout
 import com.soli.pullupdownrefresh.more.LoadMoreRecyclerAdapter
-
-import java.util.ArrayList
-import java.util.Random
+import java.util.*
 
 /**
  * @author Soli
