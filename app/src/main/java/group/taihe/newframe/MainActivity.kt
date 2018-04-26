@@ -16,5 +16,6 @@ class MainActivity : AppCompatActivity() {
         login.setOnClickListener { start(LoginActivity::class.java) }
 
         testA.setOnClickListener { testA.visibility = View.GONE }
+        chainC.setOnClickListener { start(AnimationActivity::class.java) }
     }
 }
