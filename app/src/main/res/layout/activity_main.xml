@@ -51,10 +51,11 @@
         android:id="@+id/testOne"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="测试1"
+        android:text="A"
         app:layout_constraintCircle="@id/btnNew"
         app:layout_constraintCircleAngle="230"
-        app:layout_constraintCircleRadius="75dp" />
+        app:layout_constraintCircleRadius="75dp"
+        tools:text="@tools:sample/full_names" />
 
     <Button
         android:id="@+id/testA"
@@ -63,7 +64,8 @@
         android:layout_marginLeft="16dp"
         android:text="A"
         app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/testOne" />
+        app:layout_constraintTop_toBottomOf="@id/testOne"
+        tools:tint="@sample/matials_color" />
 
     <ImageView
         android:id="@+id/testB"
