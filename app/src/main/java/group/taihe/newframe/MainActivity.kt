@@ -17,5 +17,7 @@ class MainActivity : AppCompatActivity() {
 
         testA.setOnClickListener { testA.visibility = View.GONE }
         chainC.setOnClickListener { start(AnimationActivity::class.java) }
+
+        calendarTest.setOnClickListener { start(CalendarTestActivity::class.java) }
     }
 }
