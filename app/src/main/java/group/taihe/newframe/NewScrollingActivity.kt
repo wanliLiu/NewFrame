@@ -3,6 +3,7 @@ package group.taihe.newframe
 import android.graphics.Color
 import android.os.Build
 import android.os.Bundle
+import android.support.design.widget.AppBarLayout
 import android.support.design.widget.TabLayout
 import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentPagerAdapter
@@ -32,11 +33,10 @@ class NewScrollingActivity : AppCompatActivity() {
         supportActionBar!!.setDisplayHomeAsUpEnabled(true)
         toolbar.setNavigationOnClickListener { onBackPressed() }
         //        setTitle("");
-
-        app_bar.addOnOffsetChangedListener { appBarLayout, verticalOffset ->
+        app_bar.addOnOffsetChangedListener(AppBarLayout.OnOffsetChangedListener { _, verticalOffset ->
             eventDetect.canDetect = verticalOffset >= 0
 //            eventDetect.canDetect = false
-        }
+        })
 
 //        topImage.postDelayed({
 //            topImage.layoutParams?.height?.let {
@@ -127,7 +127,7 @@ class NewScrollingActivity : AppCompatActivity() {
         //        });
 
         app_bar.setOnClickListener {
-//            isExpand = !isExpand
+            //            isExpand = !isExpand
 //            app_bar.setExpanded(isExpand)
         }
     }
